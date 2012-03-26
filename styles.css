@@ -1,0 +1,23 @@
+#front img {
+    width: 600px;
+    height: 400px;
+    cursor: pointer;
+}
+
+li {
+    float: left;
+    list-style-type: none;
+}
+
+#thumbs img {
+    border: 1px solid white;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+#thumbs img.selected {
+    border: 1px solid black;
+    opacity: 1;
+}
