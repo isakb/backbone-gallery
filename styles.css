@@ -14,7 +14,9 @@ body {
     max-height: 600px;
     cursor: pointer;
     border: 16px solid white;
+    /*
     box-shadow: 0 -10px 20px #ddd;
+    */
 }
 
 ul {
@@ -42,7 +44,9 @@ li {
     max-width: 100px;
     max-height: 100px;
     cursor: pointer;
+    /*
     opacity: 0.5;
+    */
     border: 1px solid black;
     margin-top: 10px;
 }
