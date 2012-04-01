@@ -15,20 +15,17 @@ body {
     cursor: pointer;
 }
 
-ul {
+.thumbs ul {
     margin: 0;
     padding: 0;
+    display: inline-block;
 }
 
-li {
+.thumbs li {
     list-style-type: none;
-    display: inline;
+    display: inline-block;
     margin: 0;
     padding: 0;
-}
-
-.thumbs {
-    height: 60px;
 }
 
 .thumbs img {
@@ -36,7 +33,7 @@ li {
     max-width: 100px;
     max-height: 100px;
     cursor: pointer;
-    opacity: 0.5;
+    opacity: 0.4
 }
 
 .thumbs img.selected {
