@@ -6,6 +6,7 @@ T =
   thumbView: '<img alt="" src="<%= thumb %>" class="<%= state %>" />'
 
 
+
 class Picture extends Backbone.Model
 
   defaults:
@@ -42,15 +43,12 @@ class Pictures extends Backbone.Collection
     @selected.deselect()  if @selected?
     @selected = model
     model.select()
-    @trigger 'pictures:selected', model
 
   selectedPicture: ->
     @selected
 
 
 class FrontView extends Backbone.View
-
-  el: $('#front')
 
   template: _.template(T.frontView)
 
@@ -61,28 +59,43 @@ class FrontView extends Backbone.View
 
 class ThumbView extends Backbone.View
 
+  tagName: 'li'
+
   template: _.template(T.thumbView)
 
   events:
-    click: "selectPicture"
-
-  tagName: 'li'
-
-  initialize: ->
-    @model.bind 'change', @render, @
+    click: "onClick"
 
   render: ->
     $(@el).html @template @model.toJSON()
     @
 
-  selectPicture: ->
-    @trigger 'thumb:selected', @model
+  onClick: ->
+    notifier.trigger 'picture:selected', @model
+
+
+class ThumbsView extends Backbone.View
+
+  events:
+    hover: "onHover"
+
+  onHover: (event) ->
+    #console.log event.target
+
+  render: ->
+    $el = $(@el)
+    $el.html('')
+    @model.each (t) =>
+      view = new ThumbView(model: t).render()
+      $el.append view.el
 
 
 class AppView extends Backbone.View
 
   events:
-    "click #front img": "showNextPicture"
+    "click .front img": "showNextPicture"
+    "swipeleft .front img": "showNextPicture"
+    "swiperight .front img": "showLastPicture"
 
   el: $("#container")
 
@@ -97,17 +110,21 @@ class AppView extends Backbone.View
     @pictures.each (pic, index) -> pic.set 'index', index
 
     @pictures.select @pictures.at 0
-    @frontview = new FrontView(model: @pictures)
+
+    @frontview = new FrontView
+      el: @$('.front')
+      model: @pictures
+
+    @thumbsview = new ThumbsView
+      el: @$('.thumbs')
+      model: @pictures
+
+    notifier.bind 'picture:selected', @selectPicture, @
+
 
   render: ->
     @frontview.render()
-    $thumbsEl = @$('#thumbs')
-    console.log @pictures
-    $thumbsEl.html('')
-    @pictures.each (t) =>
-      view = new ThumbView(model: t).render()
-      view.bind 'thumb:selected', @selectPicture, @
-      $thumbsEl.append view.el
+    @thumbsview.render()
 
   selectPicture: (pic) ->
     @pictures.select pic
@@ -151,7 +168,7 @@ class AppRouter extends Backbone.Router
   defaultAction: (args) ->
     @navigate app.pictures.selectedPicture().getRoute()
 
-
+notifier = _.extend {}, Backbone.Events
 app = new AppView
 app.render()
 app_router = new AppRouter

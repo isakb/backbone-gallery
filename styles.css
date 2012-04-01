@@ -1,4 +1,4 @@
-#front img {
+.front img {
     width: 600px;
     height: 400px;
     cursor: pointer;
@@ -9,7 +9,7 @@ li {
     list-style-type: none;
 }
 
-#thumbs img {
+.thumbs img {
     border: 1px solid white;
     width: 100px;
     height: 100px;
@@ -17,7 +17,7 @@ li {
     opacity: 0.7;
 }
 
-#thumbs img.selected {
+.thumbs img.selected {
     border: 1px solid black;
     opacity: 1;
 }
