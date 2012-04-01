@@ -13,10 +13,6 @@ body {
     margin: 20px;
     max-height: 600px;
     cursor: pointer;
-    border: 16px solid white;
-    /*
-    box-shadow: 0 -10px 20px #ddd;
-    */
 }
 
 ul {
@@ -25,18 +21,14 @@ ul {
 }
 
 li {
-    float: left;
     list-style-type: none;
+    display: inline;
     margin: 0;
     padding: 0;
 }
 
 .thumbs {
-    position: absolute;
-    bottom: 60px;
     height: 60px;
-    width: 100%;
-    overflow: hidden;
 }
 
 .thumbs img {
@@ -44,13 +36,9 @@ li {
     max-width: 100px;
     max-height: 100px;
     cursor: pointer;
-    /*
     opacity: 0.5;
-    */
-    border: 1px solid black;
-    margin-top: 10px;
 }
 
 .thumbs img.selected {
-    margin-top: 0;
+    opacity: 1;
 }

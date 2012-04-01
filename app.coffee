@@ -76,16 +76,16 @@ class ThumbView extends Backbone.View
 
 class ThumbsView extends Backbone.View
 
-  events:
-    hover: "onHover"
-
-  onHover: (event) ->
-    #console.log event.target
+  initialize: (options) ->
+    @limit = options.limit
 
   render: ->
-    $el = $(@el)
-    $el.html('')
-    @model.each (t) =>
+    l = @collection.length
+    selectedIndex = @collection.selectedPicture().get('index') + l
+    halfRange = Math.floor(@limit / 2)
+    $el = @$el.html('')
+    for i in [selectedIndex - halfRange .. selectedIndex + halfRange]
+      t = @collection.at( i % l )
       view = new ThumbView(model: t).render()
       $el.append view.el
 
@@ -94,8 +94,6 @@ class AppView extends Backbone.View
 
   events:
     "click .front img": "showNextPicture"
-    "swipeleft .front img": "showNextPicture"
-    "swiperight .front img": "showLastPicture"
 
   el: $("#container")
 
@@ -109,7 +107,7 @@ class AppView extends Backbone.View
     # Used for simple prev / next pic functions:
     @pictures.each (pic, index) -> pic.set 'index', index
 
-    @pictures.select @pictures.at 0
+    #@pictures.select @pictures.at 0
 
     @frontview = new FrontView
       el: @$('.front')
@@ -117,7 +115,8 @@ class AppView extends Backbone.View
 
     @thumbsview = new ThumbsView
       el: @$('.thumbs')
-      model: @pictures
+      collection: @pictures
+      limit: 7
 
     notifier.bind 'picture:selected', @selectPicture, @
 
@@ -166,11 +165,12 @@ class AppRouter extends Backbone.Router
     app.selectPicture pic
 
   defaultAction: (args) ->
+    app.selectPicture app.pictures.at 0
     @navigate app.pictures.selectedPicture().getRoute()
+
 
 notifier = _.extend {}, Backbone.Events
 app = new AppView
-app.render()
 app_router = new AppRouter
 Backbone.history.start()
 
