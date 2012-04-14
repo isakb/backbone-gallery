@@ -7,8 +7,7 @@ T =
   thumbView: '<img alt="" src="<%= thumb %>" class="<%= state %>" />'
 
 
-
-class Picture extends Backbone.Model
+Picture = Backbone.Model.extend
 
   defaults:
     slug: ''
@@ -34,7 +33,7 @@ class Picture extends Backbone.Model
     @set state: ''
 
 
-class Pictures extends Backbone.Collection
+Pictures = Backbone.Collection.extend
 
   url: 'pictures.json'
 
@@ -53,14 +52,14 @@ class Pictures extends Backbone.Collection
     l = @length
     (i + l + deltaIndex) % l
 
-  selectNext: =>
+  selectNext: ->
     @select @at @_incrementSelection 1
 
-  selectLast: =>
+  selectLast: ->
     @select @at @_incrementSelection -1
 
 
-class FrontView extends Backbone.View
+FrontView = Backbone.View.extend
 
   template: _.template(T.frontView)
 
@@ -69,7 +68,7 @@ class FrontView extends Backbone.View
     @
 
 
-class ThumbView extends Backbone.View
+ThumbView = Backbone.View.extend
 
   tagName: 'li'
 
@@ -86,7 +85,7 @@ class ThumbView extends Backbone.View
     notifier.trigger 'picture:selected', @model
 
 
-class ThumbsView extends Backbone.View
+ThumbsView = Backbone.View.extend
 
   template: _.template(T.thumbsView)
 
@@ -105,7 +104,7 @@ class ThumbsView extends Backbone.View
       $ul.append view.el
 
 
-class AppView extends Backbone.View
+AppView = Backbone.View.extend
 
   el: $("#container")
 
@@ -146,7 +145,7 @@ class AppView extends Backbone.View
   onSelectPicture: (pic) ->
     @pictures.select pic
 
-  onKeyDown: (e) =>
+  onKeyDown: (e) ->
     switch e.which
       # Left key:
       when 37
@@ -158,7 +157,7 @@ class AppView extends Backbone.View
         false
 
 
-class AppRouter extends Backbone.Router
+AppRouter = Backbone.Router.extend
 
   routes:
     "pic/:slug": "showPicture"
@@ -184,7 +183,7 @@ app_router = new AppRouter
 Backbone.history.start()
 
 $(window).on
-  keydown: app.onKeyDown
+  keydown: _.bind app.onKeyDown, app
 
 
 # For convenience while developing:
